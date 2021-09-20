@@ -26,19 +26,23 @@ import            Text.Printf         (printf)
 
 {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
+-- Create the validator, as inlinable
 {-# INLINABLE saleValidator #-}
-
 saleValidator :: BuiltinData -> BuiltinData -> ScriptContext -> ()
 saleValidator _ r _
+  -- Redeemer must match the integer 27 or fails
   | r == I 27 = ()
   | otherwise = traceError "Incorrect Redeemer!"
-  
+
+-- Compile the validator to plutus core
 validator :: Validator
 validator = mkValidatorScript $$(PlutusTx.compile [|| saleValidator ||])
 
+-- Get the hash of the validator
 valHash :: Ledger.ValidatorHash
 valHash = Scripts.validatorHash validator
 
+-- Get the address of the validator
 srcAddress :: Ledger.Address
 srcAddress = scriptAddress validator
 
