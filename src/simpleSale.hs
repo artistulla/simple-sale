@@ -42,7 +42,7 @@ instance Scripts.ValidatorTypes saleDataType where
   type instance DatumType saleDataType = ()
   type instance RedeemerType saleDataType = Integer
   
--- Wrap the validator with types and compiler
+-- Wrap the validator with types and compiler (make typed validator vs make validator)
 saledatatypeValidator :: Scripts.TypedValidator saleDataType
 saledatatypeValidator = Scripts.mkTypedValidator @saleDataType
     $$(PlutusTx.compile [|| saleValidator ||])
