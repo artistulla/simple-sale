@@ -36,6 +36,7 @@ saleValidator _ r _ = traceIfFalse "Incorrect Redeemer!" $ r == 27
   -- | r == I 27 = ()
   -- | otherwise = traceError "Incorrect Redeemer!"
 
+-- ## Boilerplate for compiling a typed validator ##
 -- Define dummy data types
 data saleDataType
 instance Scripts.ValidatorTypes saleDataType where
@@ -53,10 +54,12 @@ saledatatypeValidator = Scripts.mkTypedValidator @saleDataType
 -- Compile the validator to plutus core
 validator :: Validator
 validator = Scripts.validatorScript saledatatypeValidator
+-- ## End of Boilerplate ##
 
 -- Get the hash of the validator
 valHash :: Ledger.ValidatorHash
-valHash = Scripts.validatorHash validator
+-- Updated for using the above boilerplate:
+valHash = Scripts.validatorHash saledatatypeValidator
 
 -- Get the address of the validator
 srcAddress :: Ledger.Address
