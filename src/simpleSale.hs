@@ -28,11 +28,11 @@ import            Text.Printf         (printf)
 
 -- Create the validator, as inlinable
 {-# INLINABLE saleValidator #-}
-saleValidator :: () -> Integer -> ScriptContext -> ()
-saleValidator _ r _
-  -- Redeemer must match the integer 27 or fails
-  | r == I 27 = ()
-  | otherwise = traceError "Incorrect Redeemer!"
+saleValidator :: () -> Integer -> ScriptContext -> Bool
+saleValidator _ r _ = r == 27
+  -- Redeemer must match the integer 27 or fails .. new code above ^
+  -- | r == I 27 = ()
+  -- | otherwise = traceError "Incorrect Redeemer!"
 
 -- Compile the validator to plutus core
 validator :: Validator
