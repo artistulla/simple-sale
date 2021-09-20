@@ -29,7 +29,9 @@ import            Text.Printf         (printf)
 -- Create the validator, as inlinable
 {-# INLINABLE saleValidator #-}
 saleValidator :: () -> Integer -> ScriptContext -> Bool
-saleValidator _ r _ = r == 27
+saleValidator _ r _ = traceIfFalse "Incorrect Redeemer!" $ r == 27
+-- Following would return no "nice" error, new above using traceIfFalse
+-- saleValidator _ r _ = r == 27
   -- Redeemer must match the integer 27 or fails .. new code above ^
   -- | r == I 27 = ()
   -- | otherwise = traceError "Incorrect Redeemer!"
