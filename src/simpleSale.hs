@@ -36,9 +36,23 @@ saleValidator _ r _ = traceIfFalse "Incorrect Redeemer!" $ r == 27
   -- | r == I 27 = ()
   -- | otherwise = traceError "Incorrect Redeemer!"
 
+-- Define dummy data types
+data saleDataType
+instance Scripts.ValidatorTypes saleDataType where
+  type instance DatumType saleDataType = ()
+  type instance RedeemerType saleDataType = Integer
+  
+-- Wrap the validator with types and compiler
+saledatatypeValidator :: Scripts.TypedValidator saleDataType
+saledatatypeValidator = Scripts.mkTypedValidator @saleDataType
+    $$(PlutusTx.compile [|| saleValidator ||])
+    $$(PlutusTx.compile [|| wrap ||])
+  where
+    wrap = Scripts.wrapValidator @() @Integer
+
 -- Compile the validator to plutus core
 validator :: Validator
-validator = mkValidatorScript $$(PlutusTx.compile [|| saleValidator ||])
+validator = Scripts.validatorScript saledatatypeValidator
 
 -- Get the hash of the validator
 valHash :: Ledger.ValidatorHash
