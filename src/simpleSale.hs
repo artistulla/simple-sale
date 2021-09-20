@@ -28,7 +28,7 @@ import            Text.Printf         (printf)
 
 -- Create the validator, as inlinable
 {-# INLINABLE saleValidator #-}
-saleValidator :: BuiltinData -> BuiltinData -> ScriptContext -> ()
+saleValidator :: () -> Integer -> ScriptContext -> ()
 saleValidator _ r _
   -- Redeemer must match the integer 27 or fails
   | r == I 27 = ()
