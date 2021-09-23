@@ -9,7 +9,7 @@
 {-# LANGUAGE TypeFamilies         #-}
 {-# LANGUAGE TypeOperators        #-}
 
-module simpleSale where
+module Starter where
 
 import            Control.Monad       hiding (fmap)
 import            Data.map            as Map
@@ -29,34 +29,34 @@ import            Text.Printf         (printf)
 
 -- Create the validator, as inlinable
 {-# INLINABLE saleValidator #-}
-saleValidator :: () -> Integer -> ScriptContext -> Bool
-saleValidator _ r _ = traceIfFalse "Incorrect Redeemer!" $ r == 27
+starterValidator :: () -> Integer -> ScriptContext -> Bool
+starterValidator _ r _ = traceIfFalse "Incorrect Redeemer!" $ r == 27
 -- above: succeed if redeemer == 27 otherwise fail with custom error msg
 
 -- ## Boilerplate for compiling a typed validator ##
 -- Define dummy data types
 data saleDataType
-instance Scripts.ValidatorTypes saleDataType where
-  type instance DatumType saleDataType = ()
-  type instance RedeemerType saleDataType = Integer
+instance Scripts.ValidatorTypes starterDataType where
+  type instance DatumType starterDataType = ()
+  type instance RedeemerType starterDataType = Integer
   
 -- Wrap the validator with types and compiler (make typed validator vs make validator)
-saledatatypeValidator :: Scripts.TypedValidator saleDataType
-saledatatypeValidator = Scripts.mkTypedValidator @saleDataType
-    $$(PlutusTx.compile [|| saleValidator ||])
+starterdatatypeValidator :: Scripts.TypedValidator starterDataType
+starterdatatypeValidator = Scripts.mkTypedValidator @starterDataType
+    $$(PlutusTx.compile [|| starterValidator ||])
     $$(PlutusTx.compile [|| wrap ||])
   where
     wrap = Scripts.wrapValidator @() @Integer
 
 -- Compile the validator to plutus core
 validator :: Validator
-validator = Scripts.validatorScript saledatatypeValidator
+validator = Scripts.validatorScript starterdatatypeValidator
 -- ## End of Boilerplate ##
 
 -- Get the hash of the validator
 valHash :: Ledger.ValidatorHash
 -- Updated for using the above boilerplate:
-valHash = Scripts.validatorHash saledatatypeValidator
+valHash = Scripts.validatorHash starterdatatypeValidator
 
 -- Get the address of the validator
 srcAddress :: Ledger.Address
