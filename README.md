@@ -1,2 +1,2 @@
-# simple-sale
-Cardano Haskell-Plutus Smart Contract for a simple sale exchange between two trustless parties
+# Starter Smart Contract
+Cardano Haskell-Plutus Smart Contract for a simple comparison
